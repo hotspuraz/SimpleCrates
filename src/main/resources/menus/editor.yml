@@ -1,0 +1,54 @@
+menu:
+  title: ᴄʀᴀᴛᴇꜱ - ᴇᴅɪᴛᴏʀ
+  rows: 4
+  items:
+    filler:
+      name: '&7'
+      material: BLACK_STAINED_GLASS_PANE
+      slots:
+        - 27
+        - 28
+        - 29
+        - 31
+        - 33
+        - 34
+        - 35
+    crates:
+      name: '&aᴄʀᴀᴛᴇꜱ'
+      material: CHEST
+      lore:
+        - '&7ᴠɪᴇᴡ ᴀɴᴅ ᴍᴀɴᴀɢᴇ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ᴄʀᴀᴛᴇꜱ.'
+        - ''
+        - '&6ʟᴇꜰᴛ-ᴄʟɪᴄᴋ&e ᴛᴏ ɴᴀᴠɪɢᴀᴛᴇ'
+      slot: 12
+      click-action:
+        - 'crates editor crates'
+    keys:
+      name: '&aᴋᴇʏꜱ'
+      material: TRIPWIRE_HOOK
+      lore:
+        - '&7ᴠɪᴇᴡ ᴀɴᴅ ᴍᴀɴᴀɢᴇ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ᴋᴇʏꜱ.'
+        - ''
+        - '&6ʟᴇꜰᴛ-ᴄʟɪᴄᴋ&e ᴛᴏ ɴᴀᴠɪɢᴀᴛᴇ'
+      slot: 14
+      click-action:
+        - 'crates editor keys'
+    reload:
+      name: '&aʀᴇʟᴏᴀᴅ'
+      material: EMERALD
+      lore:
+        - '&7ʀᴇʟᴏᴀᴅ ᴀʟʟ ꜱᴇᴛᴛɪɴɢꜱ.'
+        - ''
+        - '&6ᴄʟɪᴄᴋ&e ᴛᴏ ʀᴇʟᴏᴀᴅ'
+      slot: 30
+      click-action:
+        - '[CLOSE]'
+        - crates reload
+    close:
+      name: '&cᴄʟᴏꜱᴇ'
+      material: BARRIER
+      lore:
+        - '&7ᴄʟᴏꜱᴇ ᴛʜᴇ ᴍᴇɴᴜ.'
+      slot: 32
+      click-action:
+        - '[CLOSE]'

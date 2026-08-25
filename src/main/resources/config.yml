@@ -1,0 +1,23 @@
+# #######################################
+# #                                    ##
+# #       Simple Crates (v1.0.0)       ##
+# #      Developed by Cássio Martim    ##
+# #                                    ##
+# #######################################
+
+# Types of providers: decent, cmi, fancy
+hologram-provider: decent
+crate-hologram:
+  tight-spacing:
+    enabled: true
+    text-line-height: 0.28
+    empty-line-height: 0.1
+
+crate-open:
+  no-key-pushback:
+    enabled: true
+    horizontal-strength: 0.45
+    vertical-strength: 0.12
+    sound: entity.player.attack.knockback
+    sound-volume: 0.9
+    sound-pitch: 1.05

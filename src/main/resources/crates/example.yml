@@ -1,0 +1,35 @@
+data:
+  uuid: 90d84691-c319-4139-a332-7458e42ef951
+  identifier: example
+  display-name: Example
+item:
+  material: CHEST
+  name: '&#CCFF00Example Crate'
+  lore:
+    - '&7This is an example crate, you can edit it as you wish!'
+    - ''
+    - '&eUse this crate to get awesome rewards!'
+  amount: 1
+hologram:
+  offset: 2.8000000000000016
+  lines:
+    - '&e&l%name%'
+    - ''
+    - '&eGet a key: &7simplesurvival.gg'
+    - '&7You have &e%simplecrates_key_key_2%&7 Keys.'
+permission:
+  key: simplecrates.crate.example
+  required: false
+key:
+  required: true
+  ids: [ ]
+options:
+  enabled: true
+  preview-reward: false
+  open-money-cost: 0.0
+  open-cooldown-in-seconds: 0
+preview-reward:
+  switch-seconds: 3
+  text: '&e%reward%'
+  text-height: 1.7499999999999996
+  item-height: 1.4000000000000001

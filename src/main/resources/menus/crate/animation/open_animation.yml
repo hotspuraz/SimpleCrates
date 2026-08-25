@@ -1,0 +1,37 @@
+animation:
+  title: '&8ᴏᴘᴇɴɪɴɢ &6%crate%'
+  rows: 3
+  duration-ticks: 24
+  dramatic-pause-ticks: 10
+  frame-period-ticks: 2
+  middle-slots:
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+  glass-materials:
+    - LIGHT_BLUE_STAINED_GLASS_PANE
+    - CYAN_STAINED_GLASS_PANE
+    - YELLOW_STAINED_GLASS_PANE
+    - LIME_STAINED_GLASS_PANE
+  reward-lore:
+    - '&7Potential Reward'
+    - ''
+    - '&fChance: &e%chance%%'
+  open-sound: BLOCK_ENDER_CHEST_OPEN
+  open-volume: 1.0
+  open-pitch: 1.0
+  tick-sound: UI_BUTTON_CLICK
+  tick-volume: 0.6
+  tick-pitch: 1.4
+  finish-sound: ENTITY_PLAYER_LEVELUP
+  finish-volume: 1.0
+  finish-pitch: 1.0
+  filler:
+    material: BLACK_STAINED_GLASS_PANE
+    name: '&7'

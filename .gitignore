@@ -1,0 +1,55 @@
+# Zipped SRC
+SimpleCrates.zip
+
+# Gradle / Kotlin build outputs
+.gradle/
+build/
+out/
+.kotlin/
+
+# Keep Gradle Wrapper JAR tracked
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Eclipse / NetBeans
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated/
+.springBeans
+.sts4-cache/
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+dist/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+logs/
+tmp/
+temp/
+
+# Local test server/runtime files
+server/
+run/
+
+# Local env / secrets
+.env
+.env.*
+*.local

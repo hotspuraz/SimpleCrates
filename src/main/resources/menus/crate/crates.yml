@@ -1,0 +1,48 @@
+menu:
+  title: ᴇᴅɪᴛᴏʀ ➡ ᴄʀᴀᴛᴇꜱ
+  rows: 6
+  items-per-page: 20
+  items:
+    crate:
+      name: '%name% &7(ɪᴅ: %id%)'
+      material: CHEST
+      lore:
+        - '&7ʙʏ ᴄʟɪᴄᴋɪɴɢ ʜᴇʀᴇ ʏᴏᴜ ᴡɪʟʟ ʙᴇ'
+        - '&7ᴀʙʟᴇ ᴛᴏ ᴄᴏɴꜰɪɢᴜʀᴇ ᴛʜɪꜱ ᴄʀᴀᴛᴇ.'
+        - ''
+        - '&fᴇɴᴀʙʟᴇᴅ: %is_enabled%'
+        - ''
+        - '&6ʟᴇꜰᴛ-ᴄʟɪᴄᴋ: &eɴᴀᴠɪɢᴀᴛᴇ.'
+        - '&6ʀɪɢʜᴛ-ᴄʟɪᴄᴋ: &eʀᴇᴄᴇɪᴠᴇ ᴄʀᴀᴛᴇ.'
+    add-crate:
+      name: '&aᴀᴅᴅ ᴄʀᴀᴛᴇ'
+      material: LIME_STAINED_GLASS_PANE
+      lore:
+        - '&7ʙʏ ᴄʟɪᴄᴋɪɴɢ ʜᴇʀᴇ ʏᴏᴜ ᴡɪʟʟ ʙᴇ'
+        - '&7ᴀʙʟᴇ ᴛᴏ ᴄʀᴇᴀᴛᴇ ᴀ ᴄʀᴀᴛᴇ ᴛʏᴘᴇ.'
+        - ''
+        - '&6ʟᴇꜰᴛ-ᴄʟɪᴄᴋ: &eᴄʀᴇᴀᴛᴇ ᴄʀᴀᴛᴇ.'
+    last-page:
+      material: SPECTRAL_ARROW
+      name: '&cᴘʀᴇᴠɪᴏᴜꜱ ᴘᴀɢᴇ'
+      slot: 45
+    next-page:
+      material: SPECTRAL_ARROW
+      name: '&aɴᴇxᴛ ᴘᴀɢᴇ'
+      slot: 53
+    back:
+      name: '&cɢᴏ ʙᴀᴄᴋ'
+      material: FEATHER
+      slot: 49
+    filler:
+      slots:
+        - 48
+        - 50
+        - 51
+        - 52
+        - 53
+        - 45
+        - 46
+        - 47
+      material: BLACK_STAINED_GLASS_PANE
+      name: '&7'

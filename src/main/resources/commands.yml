@@ -1,0 +1,21 @@
+commands:
+  givekey:
+    usage: '&cUsage: /crates givekey <player> <keyId> [amount]'
+    player-not-online: "&cPlayer '&e%player%&c' is not online."
+    key-not-found: "&cKey '&e%key%&c' was not found."
+    success: "&aSent &e%amount%&a key(s) '&e%key%&a' to &e%player%&a."
+  givecrate:
+    usage: '&cUsage: /crates givecrate <player> <crateId> [amount]'
+    player-not-online: "&cPlayer '&e%player%&c' is not online."
+    crate-not-found: "&cCrate '&e%crate%&c' was not found."
+    success: "&aSent &e%amount%&a crate(s) '&e%crate%&a' to &e%player%&a."
+  takekey:
+    usage: '&cUsage: /crates takekey <player> <keyId> [amount]'
+    player-not-online: "&cPlayer '&e%player%&c' is not online."
+    player-has-no-key: "&e%player% does not have any '&f%key%&e' keys."
+    success: "&aRemoved &e%removed%&a '&e%key%&a' key(s) from &e%player%&a. Remaining: &e%remaining%&a."
+  keys:
+    usage: '&cUsage: /crates keys <player> [keyId]'
+    player-not-online: "&cPlayer '&e%player%&c' is not online."
+    total: '&a%player% has &e%amount%&a key(s) in total.'
+    specific: "&a%player% has &e%amount%&a key(s) of '&e%key%&a'."
