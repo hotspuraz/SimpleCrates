@@ -107,7 +107,8 @@ class CrateRewardDisplayMenu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     close()
                     sound(MenuSound.SUCCESS)
@@ -159,6 +160,7 @@ class CrateRewardDisplayMenu(
             rewardLore.slot, Item.fromStack(rewardLore)
                 .loreStrings(itemRawLore)
                 .click { event ->
+                    event.isCancelled = true
 
                     if (event.isLeftClick)
                     {
@@ -215,7 +217,7 @@ class CrateRewardDisplayMenu(
 
         val filler = CrateRewardDisplayMenuYaml.fillerItem
 
-        filler.slots.forEach { add(it, Item.fromStack(filler)) }
+        filler.slots.forEach { add(it, Item.fromStack(filler), true) }
 
         // Back
 
@@ -224,7 +226,9 @@ class CrateRewardDisplayMenu(
         if (hasLast())
             add(
                 back.slot, Item.fromStack(back)
-                    .click { _ ->
+                    .click { event ->
+                        event.isCancelled = true
+
                         sound(MenuSound.CHANGE)
                         last.build()
                     })

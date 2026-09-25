@@ -45,7 +45,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     close()
                     sound(MenuSound.SUCCESS)
@@ -124,6 +125,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
                     )
                 )
                 .click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     KeyLinkMenu(player, key, this@KeyManagerMenu).build()
                 }
@@ -142,7 +145,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     key.glowing = !key.glowing
                     key.update()
@@ -164,7 +168,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     key.virtual = !key.virtual
                     key.update()
@@ -179,7 +184,9 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
 
         add(
             statusItem.slot, Item.fromStack(statusItem)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
+
                     key.enabled = !key.enabled
                     key.update()
 
@@ -193,6 +200,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
         if (hasLast())
             backItem.slots.forEach {
                 add(it, Item.fromStack(backItem).click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     last.build()
                 })
@@ -203,7 +212,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
 
         add(
             cloneKey.slot, Item.fromStack(cloneKey)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     val cloned = key.clone()
 
@@ -233,7 +243,8 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
 
         add(
             deleteKey.slot, Item.fromStack(deleteKey)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     if (!key.delete())
                     {
@@ -256,7 +267,7 @@ class KeyManagerMenu(player: Player, val key: Key, last: Menu?) : Menu(
         // Filler
         val filler = KeyManagerMenuYaml.filler
 
-        filler.slots.forEach { add(it, Item.fromStack(filler)) }
+        filler.slots.forEach { add(it, Item.fromStack(filler), true) }
 
         show()
     }

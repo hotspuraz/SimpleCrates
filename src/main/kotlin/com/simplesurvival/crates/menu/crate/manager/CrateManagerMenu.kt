@@ -53,7 +53,8 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     close()
                     sound(MenuSound.SUCCESS)
@@ -133,6 +134,8 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
                     )
                 )
                 .click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     CrateLinkMenu(player, crate, this@CrateManagerMenu).build()
                 }
@@ -143,7 +146,9 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
 
         add(
             rewardsItem.slot, Item.fromStack(rewardsItem)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     CrateRewardsMenu(player, crate, false, this@CrateManagerMenu).build()
                 })
@@ -153,7 +158,9 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
 
         add(
             hologramItem.slot, Item.fromStack(hologramItem)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     CrateHologramMenu(player, crate, this@CrateManagerMenu).build()
                 })
@@ -388,7 +395,9 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
 
         add(
             statusItem.slot, Item.fromStack(statusItem)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
+
                     crate.options.enabled = !crate.options.enabled
                     crate.update()
 
@@ -400,7 +409,9 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
         val attachBlockItem = CrateManagerMenuYaml.attackBlock
 
         attachBlockItem.slots.forEach {
-            add(it, Item.fromStack(attachBlockItem).click { _ ->
+            add(it, Item.fromStack(attachBlockItem).click { event ->
+                event.isCancelled = true
+
                 close()
                 sound(MenuSound.SUCCESS)
 
@@ -415,6 +426,8 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
         if (hasLast())
             backItem.slots.forEach {
                 add(it, Item.fromStack(backItem).click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     last.build()
                 })
@@ -425,7 +438,8 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
 
         add(
             cloneCrate.slot, Item.fromStack(cloneCrate)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     val cloned = crate.clone()
 
@@ -454,7 +468,8 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
 
         add(
             deleteCrate.slot, Item.fromStack(deleteCrate)
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     if (!crate.delete())
                     {
@@ -474,7 +489,7 @@ class CrateManagerMenu(player: Player, val crate: Crate, last: Menu?) : Menu(
         // Filler
         val filler = CrateManagerMenuYaml.filler
 
-        filler.slots.forEach { add(it, Item.fromStack(filler)) }
+        filler.slots.forEach { add(it, Item.fromStack(filler), true) }
 
         show()
     }

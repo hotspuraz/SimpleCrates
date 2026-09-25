@@ -279,7 +279,9 @@ class CrateRewardEditMenu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
+
                     reward.broadcastMessageEnabled = !reward.broadcastMessageEnabled
                     crate.update()
 
@@ -415,7 +417,7 @@ class CrateRewardEditMenu(
 
         val filler = CrateRewardEditMenuYaml.fillerItem
 
-        filler.slots.forEach { add(it, Item.fromStack(filler)) }
+        filler.slots.forEach { add(it, Item.fromStack(filler), true) }
 
         // Back
 
@@ -424,7 +426,9 @@ class CrateRewardEditMenu(
         if (hasLast())
             add(
                 back.slot, Item.fromStack(back)
-                    .click { _ ->
+                    .click { event ->
+                        event.isCancelled = true
+
                         sound(MenuSound.CHANGE)
                         last.build()
                     })

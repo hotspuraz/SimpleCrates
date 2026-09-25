@@ -112,7 +112,7 @@ class CrateRewardWinItemsMenu(
             // Add Item
             val addItem = CrateRewardWinItemsMenuYaml.addItem
 
-            add(added, Item.fromStack(addItem))
+            add(added, Item.fromStack(addItem), true)
         } else
         {
 
@@ -151,14 +151,16 @@ class CrateRewardWinItemsMenu(
         // Filler Item
         val fillerItem = CrateRewardWinItemsMenuYaml.fillerItem
 
-        fillerItem.slots.forEach { slot -> add(slot, Item.fromStack(fillerItem)) }
+        fillerItem.slots.forEach { slot -> add(slot, Item.fromStack(fillerItem), true) }
 
         // Back Item
         val backItem = CrateRewardWinItemsMenuYaml.backItem
 
         if (hasLast())
             backItem.slots.forEach { slot ->
-                add(slot, Item.fromStack(backItem).click { _ ->
+                add(slot, Item.fromStack(backItem).click { event ->
+                    event.isCancelled = true
+
                     sound(MenuSound.CHANGE)
                     last.build()
                 })

@@ -86,7 +86,8 @@ class CrateItemMenu(player: Player, val crate: Crate, last: Menu) : Menu(
                         )
                     )
                 )
-                .click { _ ->
+                .click { event ->
+                    event.isCancelled = true
 
                     close()
                     sound(MenuSound.SUCCESS)
@@ -131,6 +132,7 @@ class CrateItemMenu(player: Player, val crate: Crate, last: Menu) : Menu(
             itemLore.slot, Item.fromStack(itemLore)
                 .loreStrings(itemRawLore)
                 .click { event ->
+                    event.isCancelled = true
 
                     if (event.isLeftClick)
                     {
@@ -182,7 +184,7 @@ class CrateItemMenu(player: Player, val crate: Crate, last: Menu) : Menu(
 
         val filler = CrateItemMenuYaml.fillerItem
 
-        filler.slots.forEach { add(it, Item.fromStack(filler)) }
+        filler.slots.forEach { add(it, Item.fromStack(filler), true) }
 
         // Back
 
@@ -191,7 +193,9 @@ class CrateItemMenu(player: Player, val crate: Crate, last: Menu) : Menu(
         if (hasLast())
             add(
                 back.slot, Item.fromStack(back)
-                    .click { _ ->
+                    .click { event ->
+                        event.isCancelled = true
+
                         sound(MenuSound.CHANGE)
                         last.build()
                     })

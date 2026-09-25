@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.simplesurvival.crates"
-version = "1.0.4"
+version = "1.0.5"
 
 bukkit {
     name = "SimpleCrates"
