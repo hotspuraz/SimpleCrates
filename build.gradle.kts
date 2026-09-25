@@ -14,8 +14,15 @@ bukkit {
     website = "cassiomartim.com"
     version = project.version.toString()
     main = "com.simplesurvival.crates.SimpleCrates"
-    apiVersion = "1.21"
+    apiVersion = "26.3"
     softDepend = listOf("DecentHolograms", "CMI", "FancyHolograms", "PlaceholderAPI")
+
+    commands {
+        register("crates") {
+            description = "Manage SimpleCrates crates and keys."
+            usage = "/crates <editor|givecrate|givekey|takekey|keys|reload>"
+        }
+    }
 }
 
 repositories {
@@ -38,8 +45,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("dev.jorel:commandapi-paper-core:11.2.0")
+    compileOnly("io.papermc.paper:paper-api:26.3.build.41-alpha")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.9.9")
 
@@ -70,5 +76,5 @@ tasks.register<Copy>("deploy") {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }

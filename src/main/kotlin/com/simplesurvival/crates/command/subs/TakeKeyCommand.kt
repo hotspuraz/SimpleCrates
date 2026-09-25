@@ -1,32 +1,27 @@
 package com.simplesurvival.crates.command.subs
 
+import com.simplesurvival.crates.command.SubCommand
 import com.simplesurvival.crates.config.CommandsConfiguration
 import com.simplesurvival.crates.service.key.KeyService
 import com.simplesurvival.crates.service.profile.CrateProfileService
-import com.simplesurvival.lib.command.sub.SubCommandAssistance
-import dev.jorel.commandapi.arguments.Argument
-import dev.jorel.commandapi.arguments.ArgumentSuggestions
-import dev.jorel.commandapi.arguments.IntegerArgument
-import dev.jorel.commandapi.arguments.StringArgument
-import dev.jorel.commandapi.executors.CommandArguments
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-class TakeKeyCommand : SubCommandAssistance("takekey", "simplecrates.admin", Target.CONSOLE)
+class TakeKeyCommand : SubCommand("takekey", "simplecrates.admin")
 {
 
-    override fun handle(sender: CommandSender, args: CommandArguments)
+    override fun execute(sender: CommandSender, args: List<String>)
     {
-        val playerName = args.get("player") as String? ?: run {
+        val playerName = args.getOrNull(0) ?: run {
             CommandsConfiguration.takeKeyUsage.send(sender)
             return
         }
-        val keyId = args.get("key") as String? ?: run {
+        val keyId = args.getOrNull(1) ?: run {
             CommandsConfiguration.takeKeyUsage.send(sender)
             return
         }
-        val amount = (args.get("amount") as Int?)?.coerceAtLeast(1) ?: 1
+        val amount = (args.getOrNull(2)?.toIntOrNull())?.coerceAtLeast(1) ?: 1
         val onlineTargetByName = Bukkit.getPlayerExact(playerName)
         val uniqueId = onlineTargetByName?.uniqueId ?: Bukkit.getOfflinePlayer(playerName).uniqueId
         val targetName = onlineTargetByName?.name ?: Bukkit.getOfflinePlayer(uniqueId).name ?: playerName
@@ -119,11 +114,13 @@ class TakeKeyCommand : SubCommandAssistance("takekey", "simplecrates.admin", Tar
         }
     }
 
-    override fun optionalArguments(): List<Argument<*>> = listOf(
-        StringArgument("player"),
-        StringArgument("key").replaceSuggestions(
-            ArgumentSuggestions.stringCollection { KeyService.keyMap.keys }
-        ),
-        IntegerArgument("amount", 1)
-    )
+    override fun tabComplete(sender: CommandSender, args: List<String>): List<String>
+    {
+        return when (args.size)
+        {
+            1 -> GiveCommandSupport.onlinePlayerNames(args[0])
+            2 -> KeyService.keyMap.keys.filter { it.startsWith(args[1], ignoreCase = true) }
+            else -> emptyList()
+        }
+    }
 }

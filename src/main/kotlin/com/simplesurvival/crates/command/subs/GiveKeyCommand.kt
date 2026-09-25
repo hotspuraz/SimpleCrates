@@ -1,35 +1,38 @@
 package com.simplesurvival.crates.command.subs
 
+import com.simplesurvival.crates.command.SubCommand
 import com.simplesurvival.crates.config.CommandsConfiguration
 import com.simplesurvival.crates.service.key.KeyService
 import com.simplesurvival.crates.service.profile.CrateProfileService
-import com.simplesurvival.lib.command.sub.SubCommandAssistance
-import dev.jorel.commandapi.arguments.*
-import dev.jorel.commandapi.executors.CommandArguments
 import org.bukkit.command.CommandSender
 
-class GiveKeyCommand : SubCommandAssistance("givekey", "simplecrates.admin", Target.CONSOLE)
+class GiveKeyCommand : SubCommand("givekey", "simplecrates.admin")
 {
 
-    override fun handle(sender: CommandSender, args: CommandArguments)
+    override fun execute(sender: CommandSender, args: List<String>)
     {
-        val input = GiveCommandSupport.parse(args.get("input") as String?) ?: run {
+        val playerName = args.getOrNull(0)
+        val identifier = args.getOrNull(1)
+        if (playerName == null || identifier == null)
+        {
             CommandsConfiguration.giveKeyUsage.send(sender)
             return
         }
-        val target = GiveCommandSupport.resolveOnlinePlayer(input.playerName)
+        val amount = args.getOrNull(2)?.toIntOrNull()?.takeIf { it > 0 } ?: 1
+
+        val target = GiveCommandSupport.resolveOnlinePlayer(playerName)
             ?: run {
                 CommandsConfiguration.giveKeyPlayerNotOnline.send(sender) {
-                    it.replace("%player%", input.playerName)
+                    it.replace("%player%", playerName)
                 }
                 return
             }
 
-        val key = KeyService.get(input.identifier)
+        val key = KeyService.get(identifier)
         if (key == null)
         {
             CommandsConfiguration.giveKeyNotFound.send(sender) {
-                it.replace("%key%", input.identifier)
+                it.replace("%key%", identifier)
             }
             return
         }
@@ -37,12 +40,12 @@ class GiveKeyCommand : SubCommandAssistance("givekey", "simplecrates.admin", Tar
         if (key.virtual)
         {
             val crateProfile = CrateProfileService.instance.load(target.uniqueId)
-            repeat(input.amount) {
+            repeat(amount) {
                 crateProfile.addKey(key.identifier)
             }
         } else
         {
-            repeat(input.amount) {
+            repeat(amount) {
                 val keyItem = key.item.cloneBuilder()
                 target.inventory.addItem(keyItem).values.forEach { leftover ->
                     target.world.dropItemNaturally(target.location, leftover)
@@ -54,24 +57,27 @@ class GiveKeyCommand : SubCommandAssistance("givekey", "simplecrates.admin", Tar
 
         CommandsConfiguration.receivedKey.send(target) {
             it
-                .replace("%amount%", input.amount.toString())
-                .replace("%key%", input.identifier)
+                .replace("%amount%", amount.toString())
+                .replace("%key%", identifier)
                 .replace("%sender%", sender.name)
         }
 
         CommandsConfiguration.giveKeySuccess.send(sender) {
             it
-                .replace("%amount%", input.amount.toString())
-                .replace("%key%", input.identifier)
+                .replace("%amount%", amount.toString())
+                .replace("%key%", identifier)
                 .replace("%player%", target.name)
         }
     }
 
-    override fun optionalArguments(): List<Argument<*>> = listOf(
-        GreedyStringArgument("input").replaceSuggestions(
-            ArgumentSuggestions.strings { info ->
-                GiveCommandSupport.suggestInput(info.currentArg(), KeyService.keyMap.keys)
-            }
-        )
-    )
+    override fun tabComplete(sender: CommandSender, args: List<String>): List<String>
+    {
+        return when (args.size)
+        {
+            1 -> GiveCommandSupport.onlinePlayerNames(args[0])
+            2 -> KeyService.keyMap.keys.filter { it.startsWith(args[1], ignoreCase = true) }
+            3 -> listOf("1", "32", "64").filter { it.startsWith(args[2]) }
+            else -> emptyList()
+        }
+    }
 }

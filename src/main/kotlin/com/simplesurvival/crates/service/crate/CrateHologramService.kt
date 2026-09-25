@@ -22,6 +22,8 @@ object CrateHologramService
     {
         remove(crate)
 
+        if (!HologramProviderRegistry.hasProvider()) return
+
         val provider = HologramProviderRegistry.getProvider()
 
         crate.locations
@@ -45,10 +47,12 @@ object CrateHologramService
 
     fun remove(crate: Crate)
     {
-        val provider = HologramProviderRegistry.getProvider()
         val crateId = crate.identifier.lowercase()
         val holograms = crateHolograms.remove(crateId) ?: return
 
+        if (!HologramProviderRegistry.hasProvider()) return
+
+        val provider = HologramProviderRegistry.getProvider()
         holograms.forEach { provider.delete(it) }
     }
 

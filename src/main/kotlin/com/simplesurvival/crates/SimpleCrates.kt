@@ -1,9 +1,9 @@
 package com.simplesurvival.crates
 
+import com.simplesurvival.crates.command.CratesCommand
 import com.simplesurvival.crates.placeholder.SimpleCratesPlaceholderExpansion
 import com.simplesurvival.crates.service.ServiceHandler
 import com.simplesurvival.lib.SimpleLib
-import com.simplesurvival.lib.command.handler.CommandHandler
 import com.simplesurvival.lib.listener.ListenerHandler
 import com.simplesurvival.lib.listener.types.MenuListener
 import org.bukkit.plugin.java.JavaPlugin
@@ -32,7 +32,12 @@ class SimpleCrates : JavaPlugin()
 
         ServiceHandler.init()
 
-        CommandHandler(this).handle("com.simplesurvival.crates.command")
+        val cratesCommand = CratesCommand()
+        getCommand("crates")?.apply {
+            setExecutor(cratesCommand)
+            tabCompleter = cratesCommand
+        }
+
         ListenerHandler(this).handle("com.simplesurvival.crates.listener")
 
         if (server.pluginManager.isPluginEnabled("PlaceholderAPI"))

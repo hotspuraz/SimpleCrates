@@ -5,4 +5,4 @@ plugins {
 rootProject.name = "SimpleCrates"
 
 include(":SimpleLib")
-project(":SimpleLib").projectDir = file("C:/Projetos/Evo/SimpleLib")
+project(":SimpleLib").projectDir = file("C:/Users/Steve/IdeaProjects/SimpleLib")
