@@ -184,14 +184,7 @@ object CratePreviewRewardService
             .filter { it.scoreboardTags.contains(entityTag) }
             .forEach { it.remove() }
 
-        val item = world.spawnEntity(center.clone().add(0.0, initialItemHeight, 0.0), EntityType.ITEM) as Item
-        item.itemStack = firstReward.item.cloneBuilder()
-        item.setGravity(false)
-        item.pickupDelay = Int.MAX_VALUE
-        item.isInvulnerable = true
-        item.isPersistent = false
-        item.velocity = item.velocity.zero()
-        item.addScoreboardTag(entityTag)
+        val item = spawnPreviewItem(center.clone().add(0.0, initialItemHeight, 0.0), entityTag, firstReward)
 
         val label = world.spawnEntity(center.clone().add(0.0, initialTextHeight, 0.0), EntityType.ARMOR_STAND) as ArmorStand
         label.isVisible = false
@@ -232,36 +225,62 @@ object CratePreviewRewardService
         val hologramId = previewHologramId(crate.identifier.lowercase(), index)
         DHAPI.removeHologram(hologramId)
 
-        val minHeight = minOf(initialItemHeight, initialTextHeight)
-        val baseLocation = center.clone().add(0.0, minHeight, 0.0)
+        val entityTag = "${TAG_PREFIX}${crate.identifier.lowercase()}_$index"
+        val world = center.world ?: return null
+
+        val chunkLoaded = world.isChunkLoaded(center.blockX shr 4, center.blockZ shr 4)
+        if (chunkLoaded)
+        {
+            world.getNearbyEntities(center.clone().add(0.0, initialItemHeight, 0.0), 1.25, 1.25, 1.25)
+                .filter { it.scoreboardTags.contains(entityTag) }
+                .forEach { it.remove() }
+        }
+
+        val baseLocation = center.clone().add(0.0, initialTextHeight, 0.0)
         val hologram = runCatching {
             DHAPI.createHologram(hologramId, baseLocation, false, mutableListOf())
         }.getOrNull() ?: return null
 
-        DHAPI.addHologramLine(hologram, firstReward.item.cloneBuilder())
         DHAPI.addHologramLine(hologram, "")
 
-        val page = DHAPI.getHologramPage(hologram, 0) ?: return null
-        val itemLine = page.lines.getOrNull(0)
-        val textLine = page.lines.getOrNull(1)
-
-        itemLine?.offsetY = (initialItemHeight - minHeight)
-        textLine?.offsetY = (initialTextHeight - minHeight)
-        itemLine?.height = 0.001
-        textLine?.height = 0.001
+        val textLine = DHAPI.getHologramPage(hologram, 0)?.lines?.getOrNull(0) ?: return null
+        textLine.height = 0.001
         hologram.realignLines()
         DHAPI.updateHologram(hologramId)
+
+        // DecentHolograms icon lines only keep the material (and legacy custom model data), so the item
+        // itself is rendered as a real item entity to preserve item models and other components.
+        val item = if (chunkLoaded)
+            spawnPreviewItem(center.clone().add(0.0, initialItemHeight, 0.0), entityTag, firstReward)
+        else null
 
         val switchTicks = (crate.previewRewardSwitchSeconds.coerceAtLeast(1) * 20)
         return DecentHologramPreviewSession(
             crateId = crate.identifier,
             hologramId = hologramId,
+            center = center,
+            entityTag = entityTag,
+            item = item,
+            itemHeight = initialItemHeight,
             rewards = rewards,
             rewardIndex = 0,
             switchTicks = switchTicks,
             ticksUntilSwitch = switchTicks,
             previewText = crate.previewRewardText.ifBlank { "%reward%" }
         )
+    }
+
+    private fun spawnPreviewItem(location: Location, entityTag: String, reward: Reward): Item
+    {
+        val item = location.world!!.spawnEntity(location, EntityType.ITEM) as Item
+        item.itemStack = reward.item.cloneBuilder()
+        item.setGravity(false)
+        item.pickupDelay = Int.MAX_VALUE
+        item.isInvulnerable = true
+        item.isPersistent = false
+        item.velocity = item.velocity.zero()
+        item.addScoreboardTag(entityTag)
+        return item
     }
 
     private fun updateLabelText(previewText: String, reward: Reward): String
@@ -391,39 +410,60 @@ object CratePreviewRewardService
     private data class DecentHologramPreviewSession(
         override val crateId: String,
         val hologramId: String,
+        val center: Location,
+        val entityTag: String,
+        var item: Item?,
+        val itemHeight: Double,
         override val rewards: List<Reward>,
         override var rewardIndex: Int,
         override val switchTicks: Int,
         override var ticksUntilSwitch: Int,
-        override val previewText: String
+        override val previewText: String,
+        var yaw: Float = 0f
     ) : BasePreviewSession
     {
+        private val itemLocation: Location
+            get() = center.clone().add(0.0, itemHeight, 0.0)
+
         override fun isValid(): Boolean
         {
-            return DHAPI.getHologram(hologramId) != null
+            return center.world != null && DHAPI.getHologram(hologramId) != null
         }
 
         override fun updateFrame()
         {
-            // DecentHolograms handles rendering. We only switch rewards at interval.
+            val world = center.world ?: return
+            if (!world.isChunkLoaded(center.blockX shr 4, center.blockZ shr 4)) return
+
+            val current = item?.takeIf { it.isValid }
+            if (current == null)
+            {
+                item = spawnPreviewItem(itemLocation, entityTag, rewards[rewardIndex])
+                return
+            }
+
+            yaw = (yaw + YAW_STEP) % 360f
+            val location = itemLocation
+            location.yaw = yaw
+            current.teleport(location)
+            current.setRotation(yaw, 0f)
         }
 
         override fun setRewardItem(reward: Reward)
         {
-            val hologram = DHAPI.getHologram(hologramId) ?: return
-            DHAPI.setHologramLine(hologram, 0, reward.item.cloneBuilder())
-            DHAPI.updateHologram(hologramId)
+            item?.takeIf { it.isValid }?.itemStack = reward.item.cloneBuilder()
         }
 
         override fun setRewardText(text: String)
         {
             val hologram = DHAPI.getHologram(hologramId) ?: return
-            DHAPI.setHologramLine(hologram, 1, text)
+            DHAPI.setHologramLine(hologram, 0, text)
             DHAPI.updateHologram(hologramId)
         }
 
         override fun dispose()
         {
+            item?.takeIf { it.isValid }?.remove()
             DHAPI.removeHologram(hologramId)
         }
     }
