@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.simplesurvival.crates"
-version = "1.0.6"
+version = "1.0.7"
 
 bukkit {
     name = "SimpleCrates"
@@ -14,7 +14,7 @@ bukkit {
     website = "cassiomartim.com"
     version = project.version.toString()
     main = "com.simplesurvival.crates.SimpleCrates"
-    apiVersion = "26.3"
+    apiVersion = "1.21"
     softDepend = listOf("DecentHolograms", "CMI", "FancyHolograms", "PlaceholderAPI")
 
     commands {
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.3.build.41-alpha")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.9.9")
 
@@ -76,5 +76,5 @@ tasks.register<Copy>("deploy") {
 }
 
 kotlin {
-    jvmToolchain(25)
+    jvmToolchain(21)
 }
